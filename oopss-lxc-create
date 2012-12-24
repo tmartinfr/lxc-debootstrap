@@ -14,6 +14,8 @@ DEBIAN_SUITE="squeeze"
 NETWORK="10.42.0"
 NETMASK="255.255.255.0"
 GATEWAY="10.42.0.254"
+BRIDGE_INTERFACE="br0"
+MACADDRBASE="42:00:00:00:00"
 DNS="10.42.0.254"
 TIMEZONE="Europe/Paris"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
@@ -44,8 +46,10 @@ set_var lxc_hostname "$1"
 set_var lxc_name $(echo $lxc_hostname | sed 's/\..*//')
 set_var lxc_rootpath "$LXC_PATH/$lxc_name"
 set_var lxc_rootfs "$lxc_rootpath/rootfs"
+set_var lxc_config "$lxc_rootpath/config"
 set_var lvm_disksize "$2"
 set_var lvm_volpath "/dev/mapper/$LXC_VG_NAME-$lxc_name"
+set_var macaddr "$MACADDRBASE:$3"
 set_var ipaddr "$NETWORK.$3"
 
 echo $vars
@@ -108,6 +112,41 @@ mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
 echo "setting timezone $TIMEZONE"
 ln -fs /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 
+echo "creating configuration file $lxc_config"
+cat <<EOT >$lxc_config
+lxc.utsname = $lxc_name
+lxc.network.type = veth
+lxc.network.flags = up
+lxc.network.link = $BRIDGE_INTERFACE
+lxc.network.name = eth0
+lxc.network.hwaddr = $macaddr
+lxc.pts = 1024
+#lxc.console =
+lxc.tty = 4
+lxc.mount.entry=proc $lxc_rootfs/proc proc nodev,noexec,nosuid 0 0
+lxc.mount.entry=devpts $lxc_rootfs/dev/pts devpts defaults 0 0
+lxc.mount.entry=sysfs $lxc_rootfs/sys sysfs defaults  0 0
+lxc.rootfs = $lxc_rootfs
+
+# devices
+lxc.cgroup.devices.deny = a
+# /dev/null and zero
+lxc.cgroup.devices.allow = c 1:3 rwm
+lxc.cgroup.devices.allow = c 1:5 rwm
+# consoles
+lxc.cgroup.devices.allow = c 5:1 rwm
+lxc.cgroup.devices.allow = c 5:0 rwm
+lxc.cgroup.devices.allow = c 4:0 rwm
+lxc.cgroup.devices.allow = c 4:1 rwm
+# /dev/{,u}random
+lxc.cgroup.devices.allow = c 1:9 rwm
+lxc.cgroup.devices.allow = c 1:8 rwm
+lxc.cgroup.devices.allow = c 136:* rwm
+lxc.cgroup.devices.allow = c 5:2 rwm
+# rtc
+lxc.cgroup.devices.allow = c 254:0 rwm
+EOT
+
 echo
-echo "Done. Config file : $lxc_rootfs/config"
+echo "Done. Start container with : lxc-start -d -n $lxc_name"
 
