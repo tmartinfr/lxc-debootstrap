@@ -9,7 +9,7 @@ LC_ALL=C
 # customizable settings
 LXC_VG_NAME="lxc"
 LXC_PATH="/var/lib/lxc"
-DEBIAN_PACKAGES="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown"
+DEBIAN_PACKAGES="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
 DEBIAN_SUITE="squeeze"
 NETWORK="10.42.0"
 NETMASK="255.255.255.0"
