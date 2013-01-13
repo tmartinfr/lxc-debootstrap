@@ -164,7 +164,8 @@ ssh-keyscan $ipaddr >>$SSH_KNOWNHOSTS_FILE 2>/dev/null
 
 echo "installing CFEngine"
 ssh $ipaddr apt-get -qq update
-ssh $ipaddr env DEBIAN_FRONTEND=noninteractive apt-get -qq --force-yes install $CFENGINE_PACKAGE
+ssh $ipaddr env DEBIAN_FRONTEND=noninteractive \
+    apt-get -qq --force-yes install $CFENGINE_PACKAGE >/dev/null
 
 echo "Done."
 
