@@ -9,6 +9,8 @@ LC_ALL=C
 # customizable settings
 LXC_VG_NAME="lxc"
 LXC_PATH="/var/lib/lxc"
+DEBIAN_MIRROR="http://debian.mirrors.ovh.net/debian"
+DEBIAN_MIRROR_2="http://ftp.oopss.org/debian"
 DEBIAN_PACKAGES="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
 DEBIAN_SUITE="squeeze"
 NETWORK="10.42.0"
@@ -76,7 +78,9 @@ echo "mount $lvm_volpath on $lxc_rootpath using fstab"
 mount $lxc_rootpath
 
 echo "populating $lxc_rootfs using debootstrap"
-debootstrap --verbose --variant=minbase --arch=amd64 --include $DEBIAN_PACKAGES $DEBIAN_SUITE $lxc_rootfs >/dev/null
+debootstrap \
+    --verbose --variant=minbase --arch=amd64 --include $DEBIAN_PACKAGES \
+    $DEBIAN_SUITE $lxc_rootfs $DEBIAN_MIRROR >/dev/null
 
 echo "networking : setting hostname"
 echo $lxc_hostname >"$lxc_rootfs/etc/hostname"
@@ -107,6 +111,12 @@ chroot $lxc_rootfs passwd -l root >/dev/null
 echo "adding SSH keys"
 mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
 [ -f $SSH_PUBFILE ] && cp $SSH_PUBFILE "$lxc_rootfs/root/.ssh/authorized_keys"
+
+echo "setting APT configuration"
+cat <<EOT >"$lxc_rootfs/etc/apt/sources.list"
+deb $DEBIAN_MIRROR $DEBIAN_SUITE main
+deb $DEBIAN_MIRROR_2 $DEBIAN_SUITE main
+EOT
 
 echo "creating configuration file $lxc_config"
 cat <<EOT >$lxc_config
