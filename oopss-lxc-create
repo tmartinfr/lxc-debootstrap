@@ -17,7 +17,6 @@ GATEWAY="10.42.0.254"
 BRIDGE_INTERFACE="br0"
 MACADDRBASE="42:00:00:00:00"
 DNS="10.42.0.254"
-TIMEZONE="Europe/Paris"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 
 usage() {
@@ -108,9 +107,6 @@ chroot $lxc_rootfs passwd -l root >/dev/null
 echo "adding SSH keys"
 mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
 [ -f $SSH_PUBFILE ] && cp $SSH_PUBFILE "$lxc_rootfs/root/.ssh/authorized_keys"
-
-echo "setting timezone $TIMEZONE"
-ln -fs /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 
 echo "creating configuration file $lxc_config"
 cat <<EOT >$lxc_config
