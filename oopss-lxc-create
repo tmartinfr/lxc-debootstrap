@@ -159,8 +159,8 @@ echo "starting container with lxc-start"
 lxc-start -d -n $lxc_name
 
 echo "adding SSH keys in known_hosts file"
-ssh-keyscan $lxc_name >>$SSH_KNOWNHOSTS_FILE
-ssh-keyscan $ipaddr >>$SSH_KNOWNHOSTS_FILE
+ssh-keyscan $lxc_name >>$SSH_KNOWNHOSTS_FILE 2>/dev/null
+ssh-keyscan $ipaddr >>$SSH_KNOWNHOSTS_FILE 2>/dev/null
 
 echo "installing CFEngine"
 ssh $ipaddr apt-get -qq update
