@@ -34,7 +34,7 @@ set_var LXC_VG_NAME ${LXC_VG_NAME:="lxc"}
 set_var LXC_PATH ${LXC_PATH:="/var/lib/lxc"}
 set_var DEBIAN_MIRROR ${DEBIAN_MIRROR:="http://debian.mirrors.ovh.net/debian"}
 set_var DEBIAN_MIRROR_2 ${DEBIAN_MIRROR_2:="http://ftp.oopss.org/debian"}
-set_var DEBIAN_PACKAGES ${DEBIAN_PACKAGES:="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"}
+set_var BASE_PACKAGES ${BASE_PACKAGES:="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"}
 set_var DEBIAN_SUITE ${DEBIAN_SUITE:="squeeze"}
 set_var NETWORK ${NETWORK:="10.42.0"}
 set_var NETMASK ${NETMASK:="255.255.255.0"}
@@ -85,7 +85,7 @@ mount $lxc_rootpath
 
 echo "populating $lxc_rootfs using debootstrap"
 debootstrap \
-    --verbose --variant=minbase --arch=amd64 --include $DEBIAN_PACKAGES \
+    --verbose --variant=minbase --arch=amd64 --include $BASE_PACKAGES \
     $DEBIAN_SUITE $lxc_rootfs $DEBIAN_MIRROR >/dev/null
 
 echo "networking : setting hostname"
