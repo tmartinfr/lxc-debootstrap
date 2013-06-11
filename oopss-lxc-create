@@ -7,21 +7,21 @@ set -e
 LC_ALL=C
 
 # customizable settings
-LXC_VG_NAME="lxc"
-LXC_PATH="/var/lib/lxc"
-DEBIAN_MIRROR="http://debian.mirrors.ovh.net/debian"
-DEBIAN_MIRROR_2="http://ftp.oopss.org/debian"
-DEBIAN_PACKAGES="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
-DEBIAN_SUITE="squeeze"
-NETWORK="10.42.0"
-NETMASK="255.255.255.0"
-GATEWAY="10.42.0.254"
-BRIDGE_INTERFACE="br0"
-MACADDRBASE="42:00:00:00:00"
-DNS="10.42.0.254"
-SSH_PUBFILE="/root/.ssh/id_rsa.pub"
-SSH_KNOWNHOSTS_FILE="/root/.ssh/known_hosts"
-CFENGINE_PACKAGE="cfengine-community"
+LXC_VG_NAME=${LXC_VG_NAME:-"lxc"}
+LXC_PATH=${LXC_PATH:-"/var/lib/lxc"}
+DEBIAN_MIRROR=${DEBIAN_MIRROR:-"http://debian.mirrors.ovh.net/debian"}
+DEBIAN_MIRROR_2=${DEBIAN_MIRROR_2:-"http://ftp.oopss.org/debian"}
+DEBIAN_PACKAGES=${DEBIAN_PACKAGES:-"openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"}
+DEBIAN_SUITE=${DEBIAN_SUITE:-"squeeze"}
+NETWORK=${NETWORK:-"10.42.0"}
+NETMASK=${NETMASK:-"255.255.255.0"}
+GATEWAY=${GATEWAY:-"10.42.0.254"}
+BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-"br0"}
+MACADDRBASE=${MACADDRBASE:-"42:00:00:00:00"}
+DNS=${DNS:-"10.42.0.254"}
+SSH_PUBFILE=${SSH_PUBFILE:-"/root/.ssh/id_rsa.pub"}
+SSH_KNOWNHOSTS_FILE=${SSH_KNOWNHOSTS_FILE:-"/root/.ssh/known_hosts"}
+CFENGINE_PACKAGE=${CFENGINE_PACKAGE:-"cfengine-community"}
 
 usage() {
 	cat <<EOT
