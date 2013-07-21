@@ -1,4 +1,5 @@
-oopss-utils
-===========
+lxc-debootstrap
+===============
 
-Oopss sysadmin utils
+Simple tool to create Debian LXC guests.
+
