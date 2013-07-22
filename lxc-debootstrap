@@ -88,7 +88,7 @@ debootstrap \
     $DEBIAN_SUITE $lxc_rootfs $DEBIAN_MIRROR >/dev/null
 
 echo "networking : setting hostname"
-echo $lxc_hostname >"$lxc_rootfs/etc/hostname"
+echo $lxc_name >"$lxc_rootfs/etc/hostname"
 
 echo "networking : setting DNS resolver $net_resolver"
 echo "nameserver $DNS" >"$lxc_rootfs/etc/resolv.conf"
