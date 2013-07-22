@@ -27,23 +27,24 @@ set_var() {
 	eval $1=$2
 }
 
-echo
-echo "Environment variables (overwritable)"
-echo "------------------------------------"
-set_var LXC_VG_NAME ${LXC_VG_NAME:="lxc"}
-set_var LXC_PATH ${LXC_PATH:="/var/lib/lxc"}
-set_var DEBIAN_MIRROR ${DEBIAN_MIRROR:="http://debian.mirrors.ovh.net/debian"}
-set_var DEBIAN_MIRROR_2 ${DEBIAN_MIRROR_2:="http://ftp.oopss.org/debian"}
-set_var BASE_PACKAGES ${BASE_PACKAGES:="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"}
-set_var DEBIAN_SUITE ${DEBIAN_SUITE:="squeeze"}
-set_var NETWORK ${NETWORK:="10.42.0"}
-set_var NETMASK ${NETMASK:="255.255.255.0"}
-set_var GATEWAY ${GATEWAY:="10.42.0.254"}
-set_var BRIDGE_INTERFACE ${BRIDGE_INTERFACE:="br0"}
-set_var MACADDRBASE ${MACADDRBASE:="42:00:00:00:00"}
-set_var DNS ${DNS:="10.42.0.254"}
-set_var SSH_PUBFILE ${SSH_PUBFILE:="/root/.ssh/id_rsa.pub"}
-set_var SSH_KNOWNHOSTS_FILE ${SSH_KNOWNHOSTS_FILE:="/root/.ssh/known_hosts"}
+# Configuration variables
+LXC_VG_NAME="lxc"
+LXC_PATH="/var/lib/lxc"
+DEBIAN_MIRROR="http://debian.mirrors.ovh.net/debian"
+DEBIAN_MIRROR_2="http://ftp.oopss.org/debian"
+BASE_PACKAGES="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
+DEBIAN_SUITE="squeeze"
+NETWORK="10.42.0"
+NETMASK="255.255.255.0"
+GATEWAY="10.42.0.254"
+BRIDGE_INTERFACE="br0"
+MACADDRBASE="42:00:00:00:00"
+DNS="10.42.0.254"
+SSH_PUBFILE="/root/.ssh/id_rsa.pub"
+SSH_KNOWNHOSTS_FILE="/root/.ssh/known_hosts"
+
+# Load configuration file
+[ -r "/etc/lxc-debootstrap.conf" ] && source "/etc/lxc-debootstrap.conf"
 
 echo
 echo "Container parameters"
