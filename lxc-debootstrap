@@ -44,7 +44,6 @@ set_var MACADDRBASE ${MACADDRBASE:="42:00:00:00:00"}
 set_var DNS ${DNS:="10.42.0.254"}
 set_var SSH_PUBFILE ${SSH_PUBFILE:="/root/.ssh/id_rsa.pub"}
 set_var SSH_KNOWNHOSTS_FILE ${SSH_KNOWNHOSTS_FILE:="/root/.ssh/known_hosts"}
-set_var CFENGINE_PACKAGE ${CFENGINE_PACKAGE:="cfengine-community"}
 
 echo
 echo "Container parameters"
@@ -165,11 +164,6 @@ lxc-start -d -n $lxc_name
 echo "adding SSH keys in known_hosts file"
 ssh-keyscan $lxc_name >>$SSH_KNOWNHOSTS_FILE 2>/dev/null
 ssh-keyscan $ipaddr >>$SSH_KNOWNHOSTS_FILE 2>/dev/null
-
-echo "installing CFEngine"
-ssh $ipaddr apt-get -qq update
-ssh $ipaddr env DEBIAN_FRONTEND=noninteractive \
-    apt-get -qq --force-yes install $CFENGINE_PACKAGE >/dev/null
 
 echo "Done."
 
