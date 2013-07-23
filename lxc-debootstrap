@@ -124,9 +124,10 @@ if [ "$res" != 'y' ] && [ "$res" != "Y" ]; then
 	echo "Aborting."
 	exit 1
 fi
+echo
 
 cache_init
-echo
+
 echo "creating logical volume $lvm_volpath"
 lvcreate -L $lvm_disksize -n $lxc_name $LXC_VG_NAME >/dev/null
 
