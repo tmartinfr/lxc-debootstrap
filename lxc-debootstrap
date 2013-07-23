@@ -32,6 +32,32 @@ $0 test1.oopss.net 5G 42
 EOT
 }
 
+
+cache_init() {
+	if [ -d "$debootstrap_cache_dir" ]; then
+		if [ -f "$debootstrap_cache_dir/etc/debian_version" ] && \
+		   [ ! -d "$debootstrap_cache_dir/debootstrap" ]; then
+			echo "debootstrap cache dir already exists"
+			return 0
+		else
+			echo "invalidating cache dir"
+			rm -rf "$debootstrap_cache_dir"
+		fi
+	fi
+
+	tmp_cache_dir=$(mktemp -d $debootstrap_cache_dir.XXXXXX)
+
+	deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
+	echo "running debootstrap (please wait, output in $deb_out)"
+	debootstrap \
+		--verbose --variant=minbase --arch=$DEBIAN_ARCH \
+		$DEBIAN_SUITE $tmp_cache_dir $DEBIAN_MIRROR >$deb_out
+	rm $deb_out
+
+	echo "enabling cache dir"
+	mv $tmp_cache_dir $debootstrap_cache_dir
+}
+
 if [ $# != 3 ]; then
 	usage
 	exit 1
@@ -58,6 +84,7 @@ MACADDRBASE="42:00:00:00:00"
 DNS="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 SSH_KNOWNHOSTS_FILE="/root/.ssh/known_hosts"
+DEBOOTSTRAP_CACHE_ROOT="/var/cache/lxc-debootstrap"
 
 # Load configuration file
 [ -r "/etc/lxc-debootstrap.conf" ] && source "/etc/lxc-debootstrap.conf"
@@ -74,6 +101,7 @@ set_var lvm_disksize "$2"
 set_var lvm_volpath "/dev/mapper/$LXC_VG_NAME-$lxc_name"
 set_var macaddr "$MACADDRBASE:$3"
 set_var ipaddr "$NETWORK.$3"
+set_var debootstrap_cache_dir "$DEBOOTSTRAP_CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
 
 echo $vars
 echo -n "Create ? "
@@ -83,6 +111,7 @@ if [ "$res" != 'y' ] && [ "$res" != "Y" ]; then
 	exit 1
 fi
 
+cache_init
 echo
 echo "creating logical volume $lvm_volpath"
 lvcreate -L $lvm_disksize -n $lxc_name $LXC_VG_NAME >/dev/null
