@@ -117,7 +117,7 @@ set_var macaddr "$MACADDRBASE:$3"
 set_var ipaddr "$NETWORK.$3"
 set_var debootstrap_cache_dir "$DEBOOTSTRAP_CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
 
-echo $vars
+echo
 echo -n "Create ? "
 read res
 if [ "$res" != 'y' ] && [ "$res" != "Y" ]; then
