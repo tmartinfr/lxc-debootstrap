@@ -57,9 +57,11 @@ cache_init() {
 	tmp_cache_dir=$(mktemp -d $debootstrap_cache_dir.XXXXXX)
 
 	deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
+	echo "cache dir does not exists"
 	echo "running debootstrap (please wait, output in $deb_out)"
 	debootstrap \
 		--verbose --variant=minbase --arch=$DEBIAN_ARCH \
+		--include libterm-readline-perl-perl,openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils \
 		$DEBIAN_SUITE $tmp_cache_dir $DEBIAN_MIRROR >$deb_out
 	rm $deb_out
 
@@ -87,7 +89,6 @@ LXC_VG_NAME="lxc"
 LXC_PATH="/var/lib/lxc"
 DEBIAN_MIRROR="http://debian.mirrors.ovh.net/debian"
 DEBIAN_MIRROR_2="http://ftp.oopss.org/debian"
-BASE_PACKAGES="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
 DEBIAN_SUITE=$(lsb_release -s --codename)
 DEBIAN_ARCH=$(dpkg --print-architecture)
 NETWORK="10.42.0"
