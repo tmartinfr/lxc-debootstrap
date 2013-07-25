@@ -142,10 +142,8 @@ echo "$lvm_volpath $lxc_rootpath ext4 defaults 0 2" >>/etc/fstab
 echo "mount $lvm_volpath on $lxc_rootpath using fstab"
 mount $lxc_rootpath
 
-echo "populating $lxc_rootfs using debootstrap"
-debootstrap \
-    --verbose --variant=minbase --arch=amd64 --include $BASE_PACKAGES \
-    $DEBIAN_SUITE $lxc_rootfs $DEBIAN_MIRROR >/dev/null
+echo "populating $lxc_rootfs"
+cp -pR $debootstrap_cache_dir/ $lxc_rootfs
 
 echo "networking : setting hostname"
 echo $lxc_name >"$lxc_rootfs/etc/hostname"
