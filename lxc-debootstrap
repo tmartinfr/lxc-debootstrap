@@ -167,6 +167,8 @@ echo "remove pointless services in a container"
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f umountfs remove >/dev/null
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f hwclock.sh remove >/dev/null
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f hwclockfirst.sh remove >/dev/null
+chroot $lxc_rootfs /usr/sbin/update-rc.d -f checkroot.sh remove >/dev/null
+chroot $lxc_rootfs /usr/sbin/update-rc.d -f umountroot remove >/dev/null
 
 echo "disabling root password"
 chroot $lxc_rootfs passwd -l root >/dev/null
