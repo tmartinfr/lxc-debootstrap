@@ -33,7 +33,7 @@ Usage: $0 HOSTNAME DISKSIZE NUMBER
 Create LXC virtual machine.
 
 Example :
-$0 test1.oopss.net 5G 42
+$0 test1 5G 42
 EOT
 }
 
@@ -106,8 +106,7 @@ FSTYPE="ext4"
 echo
 echo "Container parameters"
 echo "--------------------"
-set_var lxc_hostname "$1"
-set_var lxc_name $(echo $lxc_hostname | sed 's/\..*//')
+set_var lxc_name "$1"
 set_var lxc_rootpath "$LXC_PATH/$lxc_name"
 set_var lxc_rootfs "$lxc_rootpath/rootfs"
 set_var lxc_config "$lxc_rootpath/config"
