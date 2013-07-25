@@ -182,6 +182,10 @@ cat <<EOT >"$lxc_rootfs/etc/apt/sources.list"
 deb $DEBIAN_MIRROR $DEBIAN_SUITE main
 EOT
 
+echo "updating packages"
+{ chroot $lxc_rootfs apt-get -qq update;
+chroot $lxc_rootfs apt-get -qq upgrade; } || /bin/true
+
 echo "creating configuration file $lxc_config"
 cat <<EOT >$lxc_config
 lxc.utsname = $lxc_name
