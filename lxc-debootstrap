@@ -98,6 +98,7 @@ MACADDRBASE="42:00:00:00:00"
 DNS="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 DEBOOTSTRAP_CACHE_ROOT="/var/cache/lxc-debootstrap"
+FSTYPE="ext4"
 
 # Load configuration file
 [ -r "/etc/lxc-debootstrap.conf" ] && source "/etc/lxc-debootstrap.conf"
@@ -131,7 +132,7 @@ echo "creating logical volume $lvm_volpath"
 lvcreate -L $lvm_disksize -n $lxc_name $LXC_VG_NAME >/dev/null
 
 echo "creating filesystem on $lvm_volpath"
-mkfs.ext4 -q $lvm_volpath
+mkfs.$FSTYPE -q $lvm_volpath
 
 echo "creating root directory $lxc_rootpath"
 mkdir $lxc_rootpath
