@@ -160,6 +160,12 @@ iface eth0 inet static
     gateway $GATEWAY
 EOT
 
+echo "networking : creating hosts file"
+cat <<EOT >"$lxc_rootfs/etc/hosts"
+127.0.0.1	localhost
+127.0.1.1	$lxc_name
+EOT
+
 echo "disabling useless tty"
 sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
 
