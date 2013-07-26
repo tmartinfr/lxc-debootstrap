@@ -79,9 +79,8 @@ if [ $# != 3 ]; then
 	exit 1
 fi
 
-set_var() {
-	printf "%-20s %s\n" $1 $2
-	eval $1=$2
+show_var() {
+	printf "%-20s %s\n" $1 ${!1}
 }
 
 # Configuration variables
@@ -103,18 +102,29 @@ FSTYPE="ext4"
 # Load configuration file
 [ -r "/etc/lxc-debootstrap.conf" ] && source "/etc/lxc-debootstrap.conf"
 
+lxc_name="$1"
+lxc_rootpath="$LXC_PATH/$lxc_name"
+lxc_rootfs="$lxc_rootpath/rootfs"
+lxc_config="$lxc_rootpath/config"
+lvm_disksize="$2"
+lvm_volpath="/dev/mapper/$LXC_VG_NAME-$lxc_name"
+macaddr="$MACADDRBASE:$3"
+ipaddr="$NETWORK.$3"
+debootstrap_cache_dir="$DEBOOTSTRAP_CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
+
+# Print summary
 echo
 echo "Container parameters"
 echo "--------------------"
-set_var lxc_name "$1"
-set_var lxc_rootpath "$LXC_PATH/$lxc_name"
-set_var lxc_rootfs "$lxc_rootpath/rootfs"
-set_var lxc_config "$lxc_rootpath/config"
-set_var lvm_disksize "$2"
-set_var lvm_volpath "/dev/mapper/$LXC_VG_NAME-$lxc_name"
-set_var macaddr "$MACADDRBASE:$3"
-set_var ipaddr "$NETWORK.$3"
-set_var debootstrap_cache_dir "$DEBOOTSTRAP_CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
+show_var lxc_name
+show_var lxc_rootpath
+show_var lxc_rootfs
+show_var lxc_config
+show_var lvm_disksize
+show_var lvm_volpath
+show_var macaddr
+show_var ipaddr
+show_var debootstrap_cache_dir
 
 echo
 echo -n "Create ? "
