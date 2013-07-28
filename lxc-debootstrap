@@ -86,7 +86,7 @@ show_var() {
 # Configuration variables
 LXC_VG_NAME="lxc"
 LXC_PATH="/var/lib/lxc"
-DEBIAN_MIRROR="http://debian.mirrors.ovh.net/debian"
+DEBIAN_MIRROR="http://ftp.debian.org/debian/"
 DEBIAN_SUITE=$(lsb_release -s --codename)
 DEBIAN_ARCH=$(dpkg --print-architecture)
 NETWORK="10.42.0"
