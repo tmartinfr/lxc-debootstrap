@@ -96,7 +96,7 @@ GATEWAY="10.42.0.254"
 BRIDGE_IF="br0"
 DNS_RESOLVER="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
-DEBOOTSTRAP_CACHE_ROOT="/var/cache/lxc-debootstrap"
+CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
 
 # Load global configuration file
@@ -124,7 +124,7 @@ lvm_volpath="/dev/mapper/$LXC_VG_NAME-$lxc_name"
 ssh_pubfile="$SSH_PUBFILE"
 debian_suite="$DEBIAN_SUITE"
 debian_arch="$DEBIAN_ARCH"
-debootstrap_cache_dir="$DEBOOTSTRAP_CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
+debootstrap_cache_dir="$CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
 
 # Print summary
 echo
