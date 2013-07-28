@@ -100,7 +100,7 @@ DEBOOTSTRAP_CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
 
 # Load configuration file
-[ -r "/etc/lxc-debootstrap.conf" ] && source "/etc/lxc-debootstrap.conf"
+[ -r "/etc/lxc-debootstrap/config" ] && source "/etc/lxc-debootstrap/config"
 
 lxc_name="$1"
 lxc_rootpath="$LXC_PATH/$lxc_name"
