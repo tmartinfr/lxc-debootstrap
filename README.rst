@@ -2,7 +2,7 @@
 lxc-debootstrap
 ===============
 
-Simple tool to create Debian_ LXC containers.
+Simple tool to create Debian_ LXC_ containers.
 
 It performs the following operations :
 
@@ -16,6 +16,7 @@ It performs the following operations :
 - Starts the container
 
 .. _Debian: http://www.debian.org/
+.. _LXC: http://lxc.sourceforge.net/
 
 Requirements
 ------------
