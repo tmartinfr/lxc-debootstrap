@@ -128,6 +128,7 @@ lxc_config=$(check_var "$lxc_rootpath/config")
 lvm_disksize=$(check_var "$DISKSIZE")
 lvm_volpath=$(check_var "/dev/mapper/$LXC_VG_NAME-$lxc_name")
 ssh_pubfile=$(check_var "$SSH_PUBFILE")
+debian_mirror=$(check_var "$DEBIAN_MIRROR")
 debian_suite=$(check_var "$DEBIAN_SUITE")
 debian_arch=$(check_var "$DEBIAN_ARCH")
 debootstrap_cache_dir=$(check_var "$CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH")
@@ -228,7 +229,7 @@ cat <<EOT >$lxc_config
 lxc.utsname = $lxc_name
 lxc.network.type = veth
 lxc.network.flags = up
-lxc.network.link = $bridge_if
+lxc.network.link = $net_bridge_if
 lxc.network.name = eth0
 lxc.network.hwaddr = $net_hwaddr
 lxc.pts = 1024
