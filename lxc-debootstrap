@@ -69,6 +69,16 @@ cache_init() {
 	mv $tmp_cache_dir $debootstrap_cache_dir
 }
 
+show_var() {
+	printf "%-20s %s\n" $1 ${!1}
+}
+
+check_var() {
+	# TODO
+	echo $1
+	return 0
+}
+
 
 ###############################################################################
 # Main
@@ -80,10 +90,6 @@ if [ $# != 1 ]; then
 else
 	lxc_name="$1"
 fi
-
-show_var() {
-	printf "%-20s %s\n" $1 ${!1}
-}
 
 # Configuration variables
 LXC_VG_NAME="lxc"
@@ -109,22 +115,22 @@ if [ -r "/etc/lxc-debootstrap/containers/$lxc_name" ]; then
 	source "/etc/lxc-debootstrap/containers/$lxc_name"
 fi
 
-net_ipaddr="$IPADDR"
-net_mask="$NETMASK"
-net_hwaddr="$HWADDR"
-net_gateway="$GATEWAY"
-net_dns_resolver="$DNS_RESOLVER"
-net_bridge_if="$BRIDGE_IF"
-lxc_vg_name="$LXC_VG_NAME"
-lxc_rootpath="$LXC_PATH/$lxc_name"
-lxc_rootfs="$lxc_rootpath/rootfs"
-lxc_config="$lxc_rootpath/config"
-lvm_disksize="$DISKSIZE"
-lvm_volpath="/dev/mapper/$LXC_VG_NAME-$lxc_name"
-ssh_pubfile="$SSH_PUBFILE"
-debian_suite="$DEBIAN_SUITE"
-debian_arch="$DEBIAN_ARCH"
-debootstrap_cache_dir="$CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
+net_ipaddr=$(check_var "$IPADDR")
+net_mask=$(check_var "$NETMASK")
+net_hwaddr=$(check_var "$HWADDR")
+net_gateway=$(check_var "$GATEWAY")
+net_dns_resolver=$(check_var "$DNS_RESOLVER")
+net_bridge_if=$(check_var "$BRIDGE_IF")
+lxc_vg_name=$(check_var "$LXC_VG_NAME")
+lxc_rootpath=$(check_var "$LXC_PATH/$lxc_name")
+lxc_rootfs=$(check_var "$lxc_rootpath/rootfs")
+lxc_config=$(check_var "$lxc_rootpath/config")
+lvm_disksize=$(check_var "$DISKSIZE")
+lvm_volpath=$(check_var "/dev/mapper/$LXC_VG_NAME-$lxc_name")
+ssh_pubfile=$(check_var "$SSH_PUBFILE")
+debian_suite=$(check_var "$DEBIAN_SUITE")
+debian_arch=$(check_var "$DEBIAN_ARCH")
+debootstrap_cache_dir=$(check_var "$CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH")
 
 # Print summary
 echo
