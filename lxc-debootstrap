@@ -136,6 +136,7 @@ show_var debian_arch
 show_var lvm_disksize
 show_var lvm_volpath
 show_var net_ipaddr
+show_var net_gateway
 show_var net_hwaddr
 show_var lxc_rootfs
 show_var lxc_config
