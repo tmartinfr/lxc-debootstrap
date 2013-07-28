@@ -212,11 +212,9 @@ TODO
 ----
 
 - Check executed as root
-- Check input parameters
-  + lxc_name is short
-  + Directories do not exist
-  + DISKSIZE, IPADDR, HWADDR are defined, and only container-defined
-
+- Check lxc_name is short
+- Check directories do not exist
+- Check DISKSIZE, IPADDR, HWADDR are defined, and only container-defined
 - Option to force yes
 - Option to build all containers
 - Option to rebuild/update the debootstrap cache
