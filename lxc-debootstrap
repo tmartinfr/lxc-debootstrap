@@ -28,12 +28,12 @@ LC_ALL=C
 
 usage() {
 	cat <<EOT
-Usage: $0 HOSTNAME DISKSIZE NUMBER
+Usage: $0 NAME
 
-Create LXC virtual machine.
+Create LXC container.
 
 Example :
-$0 test1 5G 42
+$0 example1
 EOT
 }
 
@@ -74,9 +74,11 @@ cache_init() {
 # Main
 ###############################################################################
 
-if [ $# != 3 ]; then
+if [ $# != 1 ]; then
 	usage
 	exit 1
+else
+	lxc_name="$1"
 fi
 
 show_var() {
@@ -89,27 +91,39 @@ LXC_PATH="/var/lib/lxc"
 DEBIAN_MIRROR="http://ftp.debian.org/debian/"
 DEBIAN_SUITE=$(lsb_release -s --codename)
 DEBIAN_ARCH=$(dpkg --print-architecture)
-NETWORK="10.42.0"
 NETMASK="255.255.255.0"
 GATEWAY="10.42.0.254"
-BRIDGE_INTERFACE="br0"
-MACADDRBASE="42:00:00:00:00"
-DNS="10.42.0.254"
+BRIDGE_IF="br0"
+DNS_RESOLVER="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 DEBOOTSTRAP_CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
 
-# Load configuration file
-[ -r "/etc/lxc-debootstrap/config" ] && source "/etc/lxc-debootstrap/config"
+# Load global configuration file
+if [ -r "/etc/lxc-debootstrap/config" ]; then
+	source "/etc/lxc-debootstrap/config"
+fi
 
-lxc_name="$1"
+# Load container configuration file
+if [ -r "/etc/lxc-debootstrap/containers/$lxc_name" ]; then
+	source "/etc/lxc-debootstrap/containers/$lxc_name"
+fi
+
+net_ipaddr="$IPADDR"
+net_mask="$NETMASK"
+net_hwaddr="$HWADDR"
+net_gateway="$GATEWAY"
+net_dns_resolver="$DNS_RESOLVER"
+net_bridge_if="$BRIDGE_IF"
+lxc_vg_name="$LXC_VG_NAME"
 lxc_rootpath="$LXC_PATH/$lxc_name"
 lxc_rootfs="$lxc_rootpath/rootfs"
 lxc_config="$lxc_rootpath/config"
-lvm_disksize="$2"
+lvm_disksize="$DISKSIZE"
 lvm_volpath="/dev/mapper/$LXC_VG_NAME-$lxc_name"
-macaddr="$MACADDRBASE:$3"
-ipaddr="$NETWORK.$3"
+ssh_pubfile="$SSH_PUBFILE"
+debian_suite="$DEBIAN_SUITE"
+debian_arch="$DEBIAN_ARCH"
 debootstrap_cache_dir="$DEBOOTSTRAP_CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH"
 
 # Print summary
@@ -117,14 +131,14 @@ echo
 echo "Container parameters"
 echo "--------------------"
 show_var lxc_name
-show_var lxc_rootpath
-show_var lxc_rootfs
-show_var lxc_config
+show_var debian_suite
+show_var debian_arch
 show_var lvm_disksize
 show_var lvm_volpath
-show_var macaddr
-show_var ipaddr
-show_var debootstrap_cache_dir
+show_var net_ipaddr
+show_var net_hwaddr
+show_var lxc_rootfs
+show_var lxc_config
 
 echo
 echo -n "Create ? "
@@ -138,7 +152,7 @@ echo
 cache_init
 
 echo "creating logical volume $lvm_volpath"
-lvcreate -L $lvm_disksize -n $lxc_name $LXC_VG_NAME >/dev/null
+lvcreate -L $lvm_disksize -n $lxc_name $lxc_vg_name >/dev/null
 
 echo "creating filesystem on $lvm_volpath"
 mkfs.$FSTYPE -q $lvm_volpath
@@ -159,15 +173,15 @@ echo "networking : setting hostname"
 echo $lxc_name >"$lxc_rootfs/etc/hostname"
 
 echo "networking : setting DNS resolver $net_resolver"
-echo "nameserver $DNS" >"$lxc_rootfs/etc/resolv.conf"
+echo "nameserver $net_dns_resolver" >"$lxc_rootfs/etc/resolv.conf"
 
 echo "networking : setting IP configuration"
 cat <<EOT >"$lxc_rootfs/etc/network/interfaces"
 auto eth0
 iface eth0 inet static
-    address $ipaddr
-    netmask $NETMASK
-    gateway $GATEWAY
+    address $net_ipaddr
+    netmask $net_mask
+    gateway $net_gateway
 EOT
 
 echo "networking : creating hosts file"
@@ -191,11 +205,11 @@ chroot $lxc_rootfs passwd -l root >/dev/null
 
 echo "adding SSH keys"
 mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
-[ -f $SSH_PUBFILE ] && cp $SSH_PUBFILE "$lxc_rootfs/root/.ssh/authorized_keys"
+[ -f "$ssh_pubfile" ] && cp "$ssh_pubfile" "$lxc_rootfs/root/.ssh/authorized_keys"
 
 echo "setting APT configuration"
 cat <<EOT >"$lxc_rootfs/etc/apt/sources.list"
-deb $DEBIAN_MIRROR $DEBIAN_SUITE main
+deb $debian_mirror $debian_suite main
 EOT
 
 echo "updating packages"
@@ -207,9 +221,9 @@ cat <<EOT >$lxc_config
 lxc.utsname = $lxc_name
 lxc.network.type = veth
 lxc.network.flags = up
-lxc.network.link = $BRIDGE_INTERFACE
+lxc.network.link = $bridge_if
 lxc.network.name = eth0
-lxc.network.hwaddr = $macaddr
+lxc.network.hwaddr = $net_hwaddr
 lxc.pts = 1024
 #lxc.console =
 lxc.tty = 4
