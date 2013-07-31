@@ -7,7 +7,7 @@ Simple tool to create Debian_ LXC_ containers.
 It performs the following operations :
 
 - Creates LVM logical volume and filesystem for the container
-- Add entry to ``/etc/fstab`` and mount container's filesystem
+- Adds entry to ``/etc/fstab`` and mounts container's filesystem
 - Installs Debian using *debootstrap* (with cache to speed up the process)
 - Configures networking inside container
 - Disables a set of harmful/unused features for a container
