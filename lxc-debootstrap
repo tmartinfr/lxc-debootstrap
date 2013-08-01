@@ -70,7 +70,8 @@ cache_init() {
 }
 
 show_var() {
-	printf "%-20s %s\n" $1 ${!1}
+	value=$(eval "echo \$$1")
+	printf "%-20s %s\n" $1 $value
 }
 
 check_var() {
@@ -107,12 +108,12 @@ FSTYPE="ext4"
 
 # Load global configuration file
 if [ -r "/etc/lxc-debootstrap/config" ]; then
-	source "/etc/lxc-debootstrap/config"
+	. "/etc/lxc-debootstrap/config"
 fi
 
 # Load container configuration file
 if [ -r "/etc/lxc-debootstrap/containers/$lxc_name" ]; then
-	source "/etc/lxc-debootstrap/containers/$lxc_name"
+	. "/etc/lxc-debootstrap/containers/$lxc_name"
 fi
 
 net_ipaddr=$(check_var "$IPADDR")
