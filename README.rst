@@ -72,6 +72,7 @@ Example (``/etc/lxc-debootstrap/config``) : ::
     BRIDGE_INTERFACE="br0"
     NETMASK="255.255.255.0"
     GATEWAY="10.42.0.254"
+    DOMAIN="example.com"
 
 Create container-specific configuration file for an example container *example1*.
 
@@ -170,6 +171,7 @@ LXC_PATH      LXC root path where container's mount point are created
 DEBIAN_MIRROR Debian mirror URL
 DEBIAN_SUITE  Debian distribution codename
 DEBIAN_ARCH   Debian architecture
+DOMAIN        Domain name, used in /etc/hosts and /etc/resolv.conf if defined
 NETMASK       Network mask of container's network interface
 GATEWAY       Network gateway of container's network interface
 BRIDGE_IF     Network bridge interface name on host system
@@ -192,6 +194,7 @@ LXC_PATH      ``/var/lib/lxc``
 DEBIAN_MIRROR ``http://ftp.debian.org/debian/``
 DEBIAN_SUITE  Same as host (e.g. ``squeeze`` or ``wheezy``)
 DEBIAN_ARCH   Same as host (e.g. ``amd64`` or ``i386``)
+DOMAIN        None
 NETMASK       ``255.255.255.0``
 GATEWAY       ``10.42.0.254``
 BRIDGE_IF     ``br0``

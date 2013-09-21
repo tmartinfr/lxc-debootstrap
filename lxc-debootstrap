@@ -128,6 +128,7 @@ net_hwaddr=$(check_var "$HWADDR")
 net_gateway=$(check_var "$GATEWAY")
 net_dns_resolver=$(check_var "$DNS_RESOLVER")
 net_bridge_if=$(check_var "$BRIDGE_IF")
+net_domain=$(check_var "$DOMAIN")
 lxc_vg_name=$(check_var "$LXC_VG_NAME")
 lxc_rootpath=$(check_var "$LXC_PATH/$lxc_name")
 lxc_rootfs=$(check_var "$lxc_rootpath/rootfs")
@@ -149,6 +150,7 @@ show_var debian_suite
 show_var debian_arch
 show_var lvm_disksize
 show_var lvm_volpath
+show_var net_domain
 show_var net_ipaddr
 show_var net_gateway
 show_var net_hwaddr
@@ -189,6 +191,7 @@ echo $lxc_name >"$lxc_rootfs/etc/hostname"
 
 echo "networking : setting DNS resolver $net_resolver"
 echo "nameserver $net_dns_resolver" >"$lxc_rootfs/etc/resolv.conf"
+[ "$net_domain" ] && echo "search $net_domain" >>"$lxc_rootfs/etc/resolv.conf"
 
 echo "networking : setting IP configuration"
 cat <<EOT >"$lxc_rootfs/etc/network/interfaces"
@@ -200,10 +203,15 @@ iface eth0 inet static
 EOT
 
 echo "networking : creating hosts file"
-cat <<EOT >"$lxc_rootfs/etc/hosts"
-127.0.0.1	localhost
-127.0.1.1	$lxc_name
+host_file="$lxc_rootfs/etc/hosts"
+cat <<EOT >$host_file
+127.0.0.1 localhost
 EOT
+if [ "$net_domain" ]; then
+	echo "127.0.1.1 $lxc_name.$net_domain $lxc_name" >>$host_file
+else
+	echo "127.0.1.1 $lxc_name" >>$host_file
+fi
 
 echo "disabling useless tty"
 sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
