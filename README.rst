@@ -182,7 +182,7 @@ FSTYPE        Container's filesystem type
 And their default values :
 
 ============= =================================================================
-Variable      Description
+Variable      Default value
 ============= =================================================================
 **DISKSIZE**  Mandatory, no default value
 **IPADDR**    Mandatory, no default value
