@@ -116,6 +116,12 @@ if [ -r "/etc/lxc-debootstrap/containers/$lxc_name" ]; then
 	. "/etc/lxc-debootstrap/containers/$lxc_name"
 fi
 
+get_lvm_volpath() {
+	vol_name=$1
+	vol_name=$(echo $vol_name | sed 's/-/--/g')
+	echo "/dev/mapper/$LXC_VG_NAME-$vol_name"
+}
+
 net_ipaddr=$(check_var "$IPADDR")
 net_mask=$(check_var "$NETMASK")
 net_hwaddr=$(check_var "$HWADDR")
@@ -127,7 +133,7 @@ lxc_rootpath=$(check_var "$LXC_PATH/$lxc_name")
 lxc_rootfs=$(check_var "$lxc_rootpath/rootfs")
 lxc_config=$(check_var "$lxc_rootpath/config")
 lvm_disksize=$(check_var "$DISKSIZE")
-lvm_volpath=$(check_var "/dev/mapper/$LXC_VG_NAME-$lxc_name")
+lvm_volpath=$(get_lvm_volpath $lxc_name)
 ssh_pubfile=$(check_var "$SSH_PUBFILE")
 debian_mirror=$(check_var "$DEBIAN_MIRROR")
 debian_suite=$(check_var "$DEBIAN_SUITE")
