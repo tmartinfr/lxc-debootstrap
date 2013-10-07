@@ -52,6 +52,7 @@ These Debian packages must be installed :
 
 - ``lxc``
 - ``debootstrap``
+- ``lsb-release``
 
 Quickstart
 ----------
