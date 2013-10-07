@@ -54,6 +54,7 @@ cache_init() {
 		fi
 	fi
 
+	mkdir -p $CACHE_ROOT
 	tmp_cache_dir=$(mktemp -d $debootstrap_cache_dir.XXXXXX)
 
 	deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
