@@ -103,6 +103,7 @@ GATEWAY="10.42.0.254"
 BRIDGE_IF="br0"
 DNS_RESOLVER="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
+SSH_FROM_ADDR="$GATEWAY"
 CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
 
@@ -227,8 +228,12 @@ echo "disabling root password"
 chroot $lxc_rootfs passwd -l root >/dev/null
 
 echo "adding SSH keys"
+authorized_keys_file="$lxc_rootfs/root/.ssh/authorized_keys"
 mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
-[ -f "$ssh_pubfile" ] && cp "$ssh_pubfile" "$lxc_rootfs/root/.ssh/authorized_keys"
+[ -f "$ssh_pubfile" ] && cp "$ssh_pubfile" $authorized_keys_file
+if [ "$SSH_FROM_ADDR" ]; then
+	sed -i "s/^/from=$SSH_FROM_ADDR /" $authorized_keys_file
+fi
 
 echo "setting APT configuration"
 cat <<EOT >"$lxc_rootfs/etc/apt/sources.list"

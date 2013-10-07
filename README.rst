@@ -178,6 +178,7 @@ GATEWAY       Network gateway of container's network interface
 BRIDGE_IF     Network bridge interface name on host system
 DNS_RESOLVER  Name server IP address
 SSH_PUBFILE   SSH public key to allow to connect to the container root account
+SSH_FROM_ADDR IP address from where SSH root login is allowed
 CACHE_ROOT    Directory where debootstrap cache is stored
 FSTYPE        Container's filesystem type
 ============= =================================================================
@@ -201,6 +202,7 @@ GATEWAY       ``10.42.0.254``
 BRIDGE_IF     ``br0``
 DNS_RESOLVER  ``10.42.0.254``
 SSH_PUBFILE   ``/root/.ssh/id_rsa.pub``
+SSH_FROM_ADDR Same as GATEWAY
 CACHE_ROOT    ``/var/cache/lxc-debootstrap``
 FSTYPE        ``ext4``
 ============= =================================================================
