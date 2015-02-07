@@ -2,7 +2,7 @@
 lxc-debootstrap
 ===============
 
-Simple tool to create Debian_ LXC_ containers.
+Simple tool for creating Debian_ LXC_ containers.
 
 It performs the following operations :
 
@@ -25,6 +25,7 @@ Operating system
 ^^^^^^^^^^^^^^^^
 
 This tool is compatible with Debian 6.0 and 7.0, as a LXC host or container.
+The /sys/fs/cgroup filesystem should be mounted.
 
 Storage
 ^^^^^^^
@@ -35,7 +36,7 @@ Networking
 ^^^^^^^^^^
 
 A linux bridge interface whose IP address serves as network gateway for the
-containers.
+containers. IP forwarding should be enabled.
 
 Example entry in ``/etc/network/interfaces`` : ::
 
@@ -44,6 +45,7 @@ Example entry in ``/etc/network/interfaces`` : ::
         bridge_ports none
         address 10.42.0.254
         netmask 255.255.255.0
+
 
 Packages
 ^^^^^^^^
@@ -59,9 +61,9 @@ Quickstart
 
 Get the ``lxc-debootstrap`` script.
 
-Create configuration directory : ::
+Create configuration directories : ::
 
-    mkdir /etc/lxc-debootstrap /etc/lxc-debootstrap/containers
+    mkdir -p /etc/lxc-debootstrap/containers
 
 Overwrite global variables in ``/etc/lxc-debootstrap/config`` if necessary.
 See *Configuration* section below for a full list.
@@ -70,6 +72,7 @@ Example (``/etc/lxc-debootstrap/config``) : ::
 
     DEBIAN_SUITE="wheezy"
     LXC_PATH="/var/lib/lxc"
+    LXC_VG_NAME="vg1"
     BRIDGE_INTERFACE="br0"
     NETMASK="255.255.255.0"
     GATEWAY="10.42.0.254"
