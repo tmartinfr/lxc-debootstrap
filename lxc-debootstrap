@@ -255,7 +255,6 @@ lxc.network.link = $net_bridge_if
 lxc.network.name = eth0
 lxc.network.hwaddr = $net_hwaddr
 lxc.pts = 1024
-#lxc.console =
 lxc.tty = 4
 lxc.mount.entry=proc $lxc_rootfs/proc proc nodev,noexec,nosuid 0 0
 lxc.mount.entry=devpts $lxc_rootfs/dev/pts devpts defaults 0 0
