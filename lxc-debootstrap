@@ -239,6 +239,7 @@ fi
 echo "setting APT configuration"
 cat <<EOT >"$lxc_rootfs/etc/apt/sources.list"
 deb $debian_mirror $debian_suite main
+deb http://security.debian.org/ $debian_suite/updates main
 EOT
 
 echo "updating packages"
