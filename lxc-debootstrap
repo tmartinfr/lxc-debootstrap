@@ -244,10 +244,6 @@ deb $debian_mirror $debian_suite main
 deb http://security.debian.org/ $debian_suite/updates main
 EOT
 
-echo "updating packages"
-{ chroot $lxc_rootfs apt-get -qq update;
-chroot $lxc_rootfs apt-get -qq upgrade; } || /bin/true
-
 echo "creating configuration file $lxc_config"
 cat <<EOT >$lxc_config
 lxc.utsname = $lxc_name
