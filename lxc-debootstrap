@@ -27,7 +27,7 @@ LC_ALL=C
 ###############################################################################
 
 usage() {
-	cat <<EOT
+    cat <<EOT
 Usage: $0 NAME
 
 Create LXC container.
@@ -43,42 +43,42 @@ EOT
 ###############################################################################
 
 cache_init() {
-	if [ -d "$debootstrap_cache_dir" ]; then
-		if [ -f "$debootstrap_cache_dir/etc/debian_version" ] && \
-		   [ ! -d "$debootstrap_cache_dir/debootstrap" ]; then
-			echo "debootstrap cache dir already exists"
-			return 0
-		else
-			echo "invalidating cache dir"
-			rm -rf "$debootstrap_cache_dir"
-		fi
-	fi
+    if [ -d "$debootstrap_cache_dir" ]; then
+        if [ -f "$debootstrap_cache_dir/etc/debian_version" ] && \
+           [ ! -d "$debootstrap_cache_dir/debootstrap" ]; then
+            echo "debootstrap cache dir already exists"
+            return 0
+        else
+            echo "invalidating cache dir"
+            rm -rf "$debootstrap_cache_dir"
+        fi
+    fi
 
-	mkdir -p $CACHE_ROOT
-	tmp_cache_dir=$(mktemp -d $debootstrap_cache_dir.XXXXXX)
+    mkdir -p $CACHE_ROOT
+    tmp_cache_dir=$(mktemp -d $debootstrap_cache_dir.XXXXXX)
 
-	deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
-	echo "cache dir does not exist"
-	echo "running debootstrap (please wait, output in $deb_out)"
-	debootstrap \
-		--verbose --variant=minbase --arch=$DEBIAN_ARCH \
-		--include libterm-readline-perl-perl,openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils \
-		$DEBIAN_SUITE $tmp_cache_dir $DEBIAN_MIRROR >$deb_out
-	rm $deb_out
+    deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
+    echo "cache dir does not exist"
+    echo "running debootstrap (please wait, output in $deb_out)"
+    debootstrap \
+        --verbose --variant=minbase --arch=$DEBIAN_ARCH \
+        --include libterm-readline-perl-perl,openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils \
+        $DEBIAN_SUITE $tmp_cache_dir $DEBIAN_MIRROR >$deb_out
+    rm $deb_out
 
-	echo "enabling cache dir"
-	mv $tmp_cache_dir $debootstrap_cache_dir
+    echo "enabling cache dir"
+    mv $tmp_cache_dir $debootstrap_cache_dir
 }
 
 show_var() {
-	value=$(eval "echo \$$1")
-	printf "%-20s %s\n" $1 $value
+    value=$(eval "echo \$$1")
+    printf "%-20s %s\n" $1 $value
 }
 
 check_var() {
-	# TODO
-	echo $1
-	return 0
+    # TODO
+    echo $1
+    return 0
 }
 
 
@@ -87,10 +87,10 @@ check_var() {
 ###############################################################################
 
 if [ $# != 1 ]; then
-	usage
-	exit 1
+    usage
+    exit 1
 else
-	lxc_name="$1"
+    lxc_name="$1"
 fi
 
 # Configuration variables
@@ -110,18 +110,18 @@ FSTYPE="ext4"
 
 # Load global configuration file
 if [ -r "/etc/lxc-debootstrap/config" ]; then
-	. "/etc/lxc-debootstrap/config"
+    . "/etc/lxc-debootstrap/config"
 fi
 
 # Load container configuration file
 if [ -r "/etc/lxc-debootstrap/containers/$lxc_name" ]; then
-	. "/etc/lxc-debootstrap/containers/$lxc_name"
+    . "/etc/lxc-debootstrap/containers/$lxc_name"
 fi
 
 get_lvm_volpath() {
-	vol_name=$1
-	vol_name=$(echo $vol_name | sed 's/-/--/g')
-	echo "/dev/mapper/$LXC_VG_NAME-$vol_name"
+    vol_name=$1
+    vol_name=$(echo $vol_name | sed 's/-/--/g')
+    echo "/dev/mapper/$LXC_VG_NAME-$vol_name"
 }
 
 net_ipaddr=$(check_var "$IPADDR")
@@ -163,8 +163,8 @@ echo
 echo -n "Create ? "
 read res
 if [ "$res" != 'y' ] && [ "$res" != "Y" ]; then
-	echo "Aborting."
-	exit 1
+    echo "Aborting."
+    exit 1
 fi
 echo
 
@@ -199,9 +199,9 @@ echo "networking : setting IP configuration"
 cat <<EOT >"$lxc_rootfs/etc/network/interfaces"
 auto eth0
 iface eth0 inet static
-    address $net_ipaddr
-    netmask $net_mask
-    gateway $net_gateway
+address $net_ipaddr
+netmask $net_mask
+gateway $net_gateway
 EOT
 
 echo "networking : creating hosts file"
@@ -210,9 +210,9 @@ cat <<EOT >$host_file
 127.0.0.1 localhost
 EOT
 if [ "$net_domain" ]; then
-	echo "127.0.1.1 $lxc_name.$net_domain $lxc_name" >>$host_file
+    echo "127.0.1.1 $lxc_name.$net_domain $lxc_name" >>$host_file
 else
-	echo "127.0.1.1 $lxc_name" >>$host_file
+    echo "127.0.1.1 $lxc_name" >>$host_file
 fi
 
 echo "disabling useless tty"
@@ -233,7 +233,7 @@ authorized_keys_file="$lxc_rootfs/root/.ssh/authorized_keys"
 mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
 [ -f "$ssh_pubfile" ] && cp "$ssh_pubfile" $authorized_keys_file
 if [ "$SSH_FROM_ADDR" ]; then
-	sed -i "s/^/from=$SSH_FROM_ADDR /" $authorized_keys_file
+    sed -i "s/^/from=$SSH_FROM_ADDR /" $authorized_keys_file
 fi
 
 echo "setting APT configuration"
