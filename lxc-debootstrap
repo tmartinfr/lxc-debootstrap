@@ -58,7 +58,7 @@ cache_init() {
 	tmp_cache_dir=$(mktemp -d $debootstrap_cache_dir.XXXXXX)
 
 	deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
-	echo "cache dir does not exists"
+	echo "cache dir does not exist"
 	echo "running debootstrap (please wait, output in $deb_out)"
 	debootstrap \
 		--verbose --variant=minbase --arch=$DEBIAN_ARCH \
