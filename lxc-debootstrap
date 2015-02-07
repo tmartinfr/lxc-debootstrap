@@ -62,7 +62,7 @@ cache_init() {
     echo "running debootstrap (please wait, output in $deb_out)"
     debootstrap \
         --verbose --variant=minbase --arch=$DEBIAN_ARCH \
-        --include libterm-readline-perl-perl,openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils \
+        --include libterm-readline-perl-perl,openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils,unbound \
         $DEBIAN_SUITE $tmp_cache_dir $DEBIAN_MIRROR >$deb_out
     rm $deb_out
 
