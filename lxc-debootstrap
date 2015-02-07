@@ -158,6 +158,7 @@ show_var net_gateway
 show_var net_hwaddr
 show_var lxc_rootfs
 show_var lxc_config
+show_var ssh_pubfile
 
 echo
 echo -n "Create ? "
