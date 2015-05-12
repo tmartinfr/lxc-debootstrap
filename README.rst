@@ -24,8 +24,26 @@ Requirements
 Operating system
 ^^^^^^^^^^^^^^^^
 
-This tool is compatible with Debian 6.0 and 7.0, as a LXC host or container.
-The /sys/fs/cgroup filesystem should be mounted.
+The LXC host should run Debian 7.0.
+Other Debian releases can work but are not currently tested.
+
+The /sys/fs/cgroup filesystem should be mounted in ``/etc/fstab`` : ::
+
+    cgroup  /sys/fs/cgroup  cgroup  defaults  0   0
+
+Following packages should be installed : ::
+
+    bridge-utils
+    debootstrap
+    libcap2-bin
+    libpam-cap
+    libwww-perl
+    lsb-release
+    lxc
+
+Optionally, a SSH key can be generated for the root account, allowing to connect to new containers.
+
+Check https://github.com/tmartinfr/knowledge-base/blob/master/sysadmin/debian-install.rst if you need to install a LXC host from scratch.
 
 Storage
 ^^^^^^^
@@ -45,16 +63,6 @@ Example entry in ``/etc/network/interfaces`` : ::
         bridge_ports none
         address 10.42.0.254
         netmask 255.255.255.0
-
-
-Packages
-^^^^^^^^
-
-These Debian packages must be installed :
-
-- ``lxc``
-- ``debootstrap``
-- ``lsb-release``
 
 Quickstart
 ----------
@@ -216,20 +224,6 @@ FAQ
 Q : Can I install additional packages using deboostrap ``--include`` option ?
 
 A : No, it could break the debootstrap cache
-
-TODO
-----
-
-- Check executed as root
-- Check lxc_name is short
-- Check directories do not exist
-- Check DISKSIZE, IPADDR, HWADDR are defined, and only container-defined
-- Option to force yes
-- Option to build all containers
-- Option to rebuild/update the debootstrap cache
-- Option to remove container
-- Source post-hook scripts in /etc/lxc-debootstrap/post.d/
-- Auto-detect values of NETMASK, GATEWAY, DNS using bridge configuration
 
 Author
 ------
