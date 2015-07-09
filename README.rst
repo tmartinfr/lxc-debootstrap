@@ -27,6 +27,11 @@ Operating system
 This tool is compatible with Debian 6.0 and 7.0, as a LXC host or container.
 The /sys/fs/cgroup filesystem should be mounted.
 
+The cgroup filesystem should be mounted : ::
+
+    echo "cgroup  /sys/fs/cgroup  cgroup  defaults  0   0" >>/etc/fstab
+    mount /sys/fs/cgroup
+
 Storage
 ^^^^^^^
 
@@ -41,10 +46,11 @@ containers. IP forwarding should be enabled.
 Example entry in ``/etc/network/interfaces`` : ::
 
     auto br0
-        iface br0 inet static
-        bridge_ports none
-        address 10.42.0.254
-        netmask 255.255.255.0
+    iface br0 inet static
+        bridge_ports eth0
+        bridge_stp off
+        bridge_fd 0
+        bridge_maxwait 0
 
 
 Packages
