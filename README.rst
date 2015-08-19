@@ -45,6 +45,11 @@ Optionally, a SSH key can be generated for the root account, allowing to connect
 
 Check https://github.com/tmartinfr/knowledge-base/blob/master/sysadmin/debian-install.rst if you need to install a LXC host from scratch.
 
+The cgroup filesystem should be mounted : ::
+
+    echo "cgroup  /sys/fs/cgroup  cgroup  defaults  0   0" >>/etc/fstab
+    mount /sys/fs/cgroup
+
 Storage
 ^^^^^^^
 
@@ -59,10 +64,11 @@ containers. IP forwarding should be enabled.
 Example entry in ``/etc/network/interfaces`` : ::
 
     auto br0
-        iface br0 inet static
-        bridge_ports none
-        address 10.42.0.254
-        netmask 255.255.255.0
+    iface br0 inet static
+        bridge_ports eth0
+        bridge_stp off
+        bridge_fd 0
+        bridge_maxwait 0
 
 Quickstart
 ----------
