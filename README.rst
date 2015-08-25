@@ -43,13 +43,6 @@ Following packages should be installed : ::
 
 Optionally, a SSH key can be generated for the root account, allowing to connect to new containers.
 
-Check https://github.com/tmartinfr/knowledge-base/blob/master/sysadmin/debian-install.rst if you need to install a LXC host from scratch.
-
-The cgroup filesystem should be mounted : ::
-
-    echo "cgroup  /sys/fs/cgroup  cgroup  defaults  0   0" >>/etc/fstab
-    mount /sys/fs/cgroup
-
 Storage
 ^^^^^^^
 
