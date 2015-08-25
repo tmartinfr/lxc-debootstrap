@@ -225,6 +225,9 @@ chroot $lxc_rootfs /usr/sbin/update-rc.d -f hwclockfirst.sh remove >/dev/null
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f checkroot.sh remove >/dev/null
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f umountroot remove >/dev/null
 
+echo "symlinking /etc/mtab to /proc/self/mounts"
+ln -fs /proc/mounts $lxc_rootfs/etc/mtab
+
 echo "disabling root password"
 chroot $lxc_rootfs passwd -l root >/dev/null
 
