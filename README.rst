@@ -13,6 +13,7 @@ It performs the following operations :
 - Disables a set of harmful/unused features for a container
 - Allows host SSH key to connect to the container's root account
 - Creates LXC configuration file
+- Configures host to launch container at boot
 - Starts the container
 
 .. _Debian: http://www.debian.org/

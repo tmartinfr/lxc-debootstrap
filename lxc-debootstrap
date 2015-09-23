@@ -281,6 +281,9 @@ lxc.cgroup.devices.allow = c 5:2 rwm
 lxc.cgroup.devices.allow = c 254:0 rwm
 EOT
 
+echo "configuring host to launch container at boot"
+ln -s $lxc_config /etc/lxc/auto/$lxc_name
+
 echo "starting container with lxc-start"
 lxc-start -d -n $lxc_name
 
