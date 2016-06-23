@@ -2,6 +2,9 @@
 lxc-debootstrap
 ===============
 
+**This tool is not maintained anymore. Starting with Debian Jessie, the
+standard lxc-create command should be prefered.**
+
 Simple tool for creating Debian_ LXC_ containers.
 
 It performs the following operations :
