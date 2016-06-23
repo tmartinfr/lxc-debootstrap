@@ -215,8 +215,10 @@ else
     echo "127.0.1.1 $lxc_name" >>$host_file
 fi
 
-echo "disabling useless tty"
-sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
+if [ -f "$lxc_rootfs/etc/inittab" ]; then
+    echo "disabling useless tty"
+    sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
+fi
 
 echo "remove pointless services in a container"
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f umountfs remove >/dev/null
